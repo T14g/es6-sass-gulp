@@ -1,1 +1,1 @@
-# es6-sass-webpack
+# es6-sass-gulp
