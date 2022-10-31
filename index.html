@@ -1,24 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TODO APP</title>
 
-    <link rel="stylesheet" href="assets/css/app.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500;700;900&display=swap" rel="stylesheet">
-
-</head>
-<body>
-    <header>
-        <div class="container headerContainer">
-            <span class="logo">Product Filter</span>
+    <link rel="stylesheet" href="assets/css/app.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@500;700;900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="new-filter">
+      <div class="new-filter-inner">
+        <div class="new-filter-title">Encontre Toalhas com o Novo Buscador</div>
+        <div class="new-filter-description">
+          Selecione as dimensôes ou marque filtrar toalhas redondas para
+          pesquisar por diâmetro
         </div>
-    </header>
-
-    <div id="appContainer">
-       Filter
+        <div class="new-filter-controls">
+          <select class="select-largura">
+            <option value="">Largura</option>
+            <option value="1\,20">1,20</option>
+            <option value="1\,30">1,30</option>
+            <option value="1\,35">1,35</option>
+            <option value="1\,40">1,40</option>
+            <option value="1\,50">1,50</option>
+            <option value="1\,60">1,60</option>
+            <option value="1\,70">1,70</option>
+            <option value="1\,80">1,80</option>
+            <option value="1\,90">1,90</option>
+            <option value="2">2</option>
+            <option value="2\,00">2,00</option>
+            <option value="2\,20">2,20</option>
+            <option value="2\,50">2,50</option>
+            <option value="2\,80">2,80</option>
+          </select>
+          <select class="select-comprimento">
+            <option value="">Comprimento</option>
+            <option value="1\,20">1,20</option>
+            <option value="1\,30">1,30</option>
+            <option value="1\,35">1,35</option>
+            <option value="1\,40">1,40</option>
+            <option value="1\,50">1,50</option>
+            <option value="1\,60">1,60</option>
+            <option value="1\,70">1,70</option>
+            <option value="1\,80">1,80</option>
+            <option value="1\,90">1,90</option>
+            <option value="2">2</option>
+            <option value="2\,00">2,00</option>
+            <option value="2\,20">2,20</option>
+            <option value="2\,50">2,50</option>
+            <option value="2\,80">2,80</option>
+          </select>
+          <select class="select-diametro">
+            <option value="">Diâmetro</option>
+            <option value="1\,30">1,30</option>
+            <option value="1\,40">1,40</option>
+            <option value="1\,50">1,50</option>
+            <option value="1\,60">1,60</option>
+            <option value="1\,70">1,70</option>
+            <option value="1\,80">1,80</option>
+            <option value="1\,90">1,90</option>
+            <option value="2\,00">2,00</option>
+            <option value="2\,10">2,10</option>
+            <option value="2\,20">2,20</option>
+            <option value="2\,30">2,30</option>
+            <option value="2\,40">2,40</option>
+            <option value="2\,50">2,50</option>
+            <option value="2\,60">2,60</option>
+            <option value="2\,70">2,70</option>
+            <option value="2\,80">2,80</option>
+          </select>
+          <div class="block-radio">
+            <input
+              type="checkbox"
+              name="checkboxRedondas"
+              id="checkboxRedondas"
+            />
+            <label for="checkboxRedondas">Filtrar toalhas redondas</label>
+          </div>
+          <button class="btn-filtro-buscar" disabled>Buscar</button>
+        </div>
+      </div>
     </div>
     <script src="assets/js/app.min.js"></script>
-</body>
+  </body>
 </html>
