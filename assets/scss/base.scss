@@ -4,7 +4,7 @@
     font-family: Roboto, cursive;
 
     .new-filter-title {
-      font-size: 50px;
+      font-size: 40px;
       margin-block-start: 0.67em;
       margin-block-end: 0.67em;
       margin-inline-start: 0px;
@@ -29,10 +29,25 @@
         padding: 3px;
         width: 155px;
         margin-right: 10px;
+
+        @media (max-width: 730px) {
+          display: block;
+          width: 100%;
+          margin-bottom: 10px;
+        }
+
+        &.select-diametro {
+          display: none;
+        }
       }
 
       .block-radio {
         padding-top: 5px;
+
+        @media (max-width: 730px) {
+          padding-top: 0px;
+          margin-bottom: 15px;
+        }
 
         label {
           font-size: 18px;
@@ -55,6 +70,13 @@
 
         &:disabled {
           background: rgb(199, 199, 199);
+        }
+
+        @media (max-width: 730px) {
+          display: block;
+          width: 100%;
+          margin-bottom: 10px;
+          max-width: initial;
         }
       }
     }
