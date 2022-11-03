@@ -7,6 +7,18 @@ const enableSearch = () =>
 const disableSearch = () =>
   (document.getElementById("btn-filtro-buscar").disabled = true);
 
+const showLoadMore = () =>
+  document.getElementById("btn-load-more").classList.remove("hidden-btn");
+
+const hideLoadMore = () =>
+  document.getElementById("btn-load-more").classList.add("hidden-btn");
+
+const enableLoadMore = () =>
+  (document.getElementById("btn-load-more").disabled = false);
+
+const disableLoadMore = () =>
+  (document.getElementById("btn-load-more").disabled = true);
+
 const toggleSearch = () => {
   if (!validateSearch()) {
     disableSearch();
@@ -65,22 +77,21 @@ const getComprimento = () =>
 
 const getDiametro = () => document.querySelector(".select-diametro").value;
 
-document.getElementById("checkboxRedondas").addEventListener("change", () => {
-  toggleDiametro();
-});
+document
+  .getElementById("checkboxRedondas")
+  .addEventListener("change", toggleDiametro);
 
-document.getElementById("btn-filtro-buscar").addEventListener("click", () => {
-  fetchProducts();
-  console.log("fire");
-});
+document
+  .getElementById("btn-filtro-buscar")
+  .addEventListener("click", () => fetchProducts());
 
-document.getElementById("select-largura").addEventListener("change", () => {
-  toggleSearch();
-});
+document
+  .getElementById("select-largura")
+  .addEventListener("change", toggleSearch);
 
-document.getElementById("select-comprimento").addEventListener("change", () => {
-  toggleSearch();
-});
+document
+  .getElementById("select-comprimento")
+  .addEventListener("change", toggleSearch);
 
 document.getElementById("select-diametro").addEventListener("change", () => {
   toggleSearch();
@@ -167,6 +178,14 @@ const fetchProducts = () => {
 const renderProducts = (data) => {
   let html = ``;
   let productsListEl = document.getElementById("filtered-products-list");
+
+  if (data.length > 0) {
+    enableLoadMore();
+    showLoadMore();
+  } else {
+    hideLoadMore();
+    disableLoadMore();
+  }
 
   data.forEach((item) => {
     html += `
