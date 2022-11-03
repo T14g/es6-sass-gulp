@@ -20,7 +20,7 @@
           pesquisar por diâmetro
         </div>
         <div class="new-filter-controls">
-          <select class="select-largura">
+          <select class="select-largura" id="select-largura">
             <option value="">Largura</option>
             <option value="1\,20">1,20</option>
             <option value="1\,30">1,30</option>
@@ -37,7 +37,7 @@
             <option value="2\,50">2,50</option>
             <option value="2\,80">2,80</option>
           </select>
-          <select class="select-comprimento">
+          <select class="select-comprimento" id="select-comprimento">
             <option value="">Comprimento</option>
             <option value="1\,20">1,20</option>
             <option value="1\,30">1,30</option>
@@ -54,7 +54,7 @@
             <option value="2\,50">2,50</option>
             <option value="2\,80">2,80</option>
           </select>
-          <select class="select-diametro">
+          <select class="select-diametro hidden-select" id="select-diametro">
             <option value="">Diâmetro</option>
             <option value="1\,30">1,30</option>
             <option value="1\,40">1,40</option>
@@ -81,7 +81,7 @@
             />
             <label for="checkboxRedondas">Filtrar toalhas redondas</label>
           </div>
-          <button class="btn-filtro-buscar" id="btn-filtro-buscar">
+          <button class="btn-filtro-buscar" id="btn-filtro-buscar" disabled>
             Buscar
           </button>
         </div>

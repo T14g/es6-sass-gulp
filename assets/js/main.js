@@ -1,19 +1,33 @@
 const TRAY_URL = "https://www.mesachiq.com.br/web_api/products";
 const VARIANTS_URL = "https://www.mesachiq.com.br/web_api/products/variants";
 
+const enableSearch = () =>
+  (document.getElementById("btn-filtro-buscar").disabled = false);
+
+const disableSearch = () =>
+  (document.getElementById("btn-filtro-buscar").disabled = true);
+
+const toggleSearch = () => {
+  if (!validateSearch()) {
+    disableSearch();
+  } else {
+    enableSearch();
+  }
+};
+
 const toggleDiametro = () => {
   const selectDiametro = document.querySelector(".select-diametro");
   const selectLargura = document.querySelector(".select-largura");
   const selectComprimento = document.querySelector(".select-comprimento");
 
-  if (selectDiametro && selectDiametro.style.display === "none") {
-    selectDiametro.style.display = "block";
-    selectLargura.style.display = "none";
-    selectComprimento.style.display = "none";
+  if (selectDiametro && selectDiametro.classList.contains("hidden-select")) {
+    selectDiametro.classList.remove("hidden-select");
+    selectLargura.classList.add("hidden-select");
+    selectComprimento.classList.add("hidden-select");
   } else {
-    selectDiametro.style.display = "none";
-    selectLargura.style.display = "block";
-    selectComprimento.style.display = "block";
+    selectDiametro.classList.add("hidden-select");
+    selectLargura.classList.remove("hidden-select");
+    selectComprimento.classList.remove("hidden-select");
   }
 };
 
@@ -59,6 +73,36 @@ document.getElementById("btn-filtro-buscar").addEventListener("click", () => {
   fetchProducts();
   console.log("fire");
 });
+
+document.getElementById("select-largura").addEventListener("change", () => {
+  toggleSearch();
+});
+
+document.getElementById("select-comprimento").addEventListener("change", () => {
+  toggleSearch();
+});
+
+document.getElementById("select-diametro").addEventListener("change", () => {
+  toggleSearch();
+});
+
+const validateSearch = () => {
+  let valid = false;
+
+  if (getLargura() !== "") {
+    valid = true;
+  }
+
+  if (getComprimento() !== "") {
+    valid = true;
+  }
+
+  if (getDiametro() !== "") {
+    valid = true;
+  }
+
+  return valid;
+};
 
 const getParentsURLS = (data) => {
   const urls = [];
@@ -119,7 +163,7 @@ const fetchProducts = () => {
       });
     });
 };
- 
+
 const renderProducts = (data) => {
   let html = ``;
   let productsListEl = document.getElementById("filtered-products-list");
