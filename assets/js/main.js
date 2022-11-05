@@ -1,5 +1,7 @@
 const TRAY_URL = "https://www.mesachiq.com.br/web_api/products";
 const VARIANTS_URL = "https://www.mesachiq.com.br/web_api/products/variants";
+let FILTER_CURRENT_PAGE = 0;
+let FILTER_PRODUCTS_ARRAY = [];
 
 const enableSearch = () =>
   (document.getElementById("btn-filtro-buscar").disabled = false);
@@ -86,6 +88,10 @@ document
   .addEventListener("click", () => fetchProducts());
 
 document
+  .getElementById("btn-load-more")
+  .addEventListener("click", () => loadMoreProducts());
+
+document
   .getElementById("select-largura")
   .addEventListener("change", toggleSearch);
 
@@ -138,7 +144,7 @@ const setParentData = (data, prods) => {
 
 const getProductList = (data) => {
   const prods = [];
-  console.log(data);
+
   data.forEach((variant) => {
     let item = {};
     item.prod_id = variant.Variant.product_id;
@@ -170,9 +176,49 @@ const fetchProducts = () => {
         )
       ).then((data) => {
         setParentData(data, prods);
-        renderProducts(prods);
+        FILTER_PRODUCTS_ARRAY = prods;
+        renderProducts(FILTER_PRODUCTS_ARRAY);
       });
     });
+};
+
+const loadMoreProducts = () => {
+  // if(requestsCount >=150) {
+  //   alert("Por favor aguarde um instante e clique novamente");
+  //   return;
+  // }
+
+  let url = getURL();
+  url += `&page=${FILTER_CURRENT_PAGE + 1}`;
+
+  if (validateSearch()) {
+    fetch(url)
+      .then((result) => result.json())
+      .then((data) => {
+        if (data.Variants.length > 0) {
+          const { Variants } = data;
+          const prods = getProductList(Variants);
+          const urls = getParentsURLS(prods);
+          // setRequestsCount(requestsCount + urls.length + 1);
+
+          Promise.all(
+            urls.map((url) =>
+              fetch(url).then((result) => {
+                return result.json();
+              })
+            )
+          ).then((data) => {
+            setParentData(data, prods);
+            FILTER_PRODUCTS_ARRAY = [...FILTER_PRODUCTS_ARRAY, ...prods];
+            FILTER_CURRENT_PAGE += 1;
+            renderProducts(FILTER_PRODUCTS_ARRAY);
+          });
+        } else {
+          // setIsLoadingMore(false);
+          alert("Sem mais resultados.");
+        }
+      });
+  }
 };
 
 const renderProducts = (data) => {
