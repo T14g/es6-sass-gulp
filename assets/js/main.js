@@ -183,10 +183,6 @@ const fetchProducts = () => {
 };
 
 const loadMoreProducts = () => {
-  // if(requestsCount >=150) {
-  //   alert("Por favor aguarde um instante e clique novamente");
-  //   return;
-  // }
 
   let url = getURL();
   url += `&page=${FILTER_CURRENT_PAGE + 1}`;
