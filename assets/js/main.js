@@ -157,6 +157,7 @@ const getProductList = (data) => {
 };
 
 const fetchProducts = () => {
+  disableSearch();
   fetch(getURL())
     .then((result) => result.json())
     .then((data) => {
@@ -175,6 +176,7 @@ const fetchProducts = () => {
         setParentData(data, prods);
         FILTER_PRODUCTS_ARRAY = prods;
         renderProducts(FILTER_PRODUCTS_ARRAY);
+        enableSearch();
       });
     });
 };
@@ -184,6 +186,8 @@ const loadMoreProducts = () => {
   url += `&page=${FILTER_CURRENT_PAGE + 1}`;
 
   if (validateSearch()) {
+    disableLoadMore();
+
     fetch(url)
       .then((result) => result.json())
       .then((data) => {
@@ -204,10 +208,11 @@ const loadMoreProducts = () => {
             FILTER_PRODUCTS_ARRAY = [...FILTER_PRODUCTS_ARRAY, ...prods];
             FILTER_CURRENT_PAGE += 1;
             renderProducts(FILTER_PRODUCTS_ARRAY);
+            enableLoadMore();
           });
         } else {
-          // setIsLoadingMore(false);
           alert("Sem mais resultados.");
+          enableLoadMore();
         }
       });
   }
@@ -231,11 +236,11 @@ const renderProducts = (data) => {
       <div class="filter-product-single">
         <a href="${item.url}" target="_blank">
           <img src="${item.img}" />
-          <div className="name">${item.name}</div>
+          <div class="name">${item.name}</div>
           ${
             item.available
-              ? `<div className="price">A Partir de R$ ${item.price}</div>`
-              : `<div className="available">Indisponível</div>`
+              ? `<div class="price">A Partir de R$ ${item.price}</div>`
+              : `<div class="available">Indisponível</div>`
           }
         </a>
       </div>
