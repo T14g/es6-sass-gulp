@@ -50,9 +50,6 @@ const getURL = () => {
   const filterOne = getLargura();
   const filterTwo = getComprimento();
   const filterThree = getDiametro();
-  console.log(filterOne);
-  console.log(filterTwo);
-  console.log(filterThree);
 
   if (filterThree !== "") {
     url += `?type_1=Diametro&value_1=${filterThree}`;
@@ -183,7 +180,6 @@ const fetchProducts = () => {
 };
 
 const loadMoreProducts = () => {
-
   let url = getURL();
   url += `&page=${FILTER_CURRENT_PAGE + 1}`;
 
@@ -230,19 +226,21 @@ const renderProducts = (data) => {
   }
 
   data.forEach((item) => {
-    html += `
-    <div class="filter-product-single">
-      <a href="${item.url}" target="_blank">
-        <img src="${item.img}" />
-        <div className="name">${item.url}</div>
-        ${
-          item.available
-            ? `<div className="price">A Partir de R$ ${item.price}</div>`
-            : `<div className="available">Indisponível</div>`
-        }
-      </a>
-    </div>
-    `;
+    if (item.img) {
+      html += `
+      <div class="filter-product-single">
+        <a href="${item.url}" target="_blank">
+          <img src="${item.img}" />
+          <div className="name">${item.name}</div>
+          ${
+            item.available
+              ? `<div className="price">A Partir de R$ ${item.price}</div>`
+              : `<div className="available">Indisponível</div>`
+          }
+        </a>
+      </div>
+      `;
+    }
   });
 
   productsListEl.innerHTML = html;
