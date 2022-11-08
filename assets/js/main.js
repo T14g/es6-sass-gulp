@@ -164,8 +164,7 @@ const fetchProducts = () => {
       const { Variants } = data;
       const prods = getProductList(Variants);
       const urls = getParentsURLS(prods);
-      // setRequestsCount(requestsCount + urls.length + 1);
-      // console.log(urls);
+      
       Promise.all(
         urls.map((url) =>
           fetch(url).then((result) => {
@@ -195,7 +194,6 @@ const loadMoreProducts = () => {
           const { Variants } = data;
           const prods = getProductList(Variants);
           const urls = getParentsURLS(prods);
-          // setRequestsCount(requestsCount + urls.length + 1);
 
           Promise.all(
             urls.map((url) =>
