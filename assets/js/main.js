@@ -2,6 +2,14 @@ const TRAY_URL = "https://www.mesachiq.com.br/web_api/products";
 const VARIANTS_URL = "https://www.mesachiq.com.br/web_api/products/variants";
 let FILTER_CURRENT_PAGE = 0;
 let FILTER_PRODUCTS_ARRAY = [];
+let FILTER_REQUEST_COUNT = 0;
+let FILTER_TIMEOUT_RESET;
+
+const startRequestReset = () =>
+  setInterval(() => {
+    console.log("zerando");
+    clearTimeout(FILTER_TIMEOUT_RESET);
+  }, 60000);
 
 const enableSearch = () =>
   (document.getElementById("btn-filtro-buscar").disabled = false);
@@ -161,10 +169,15 @@ const fetchProducts = () => {
   fetch(getURL())
     .then((result) => result.json())
     .then((data) => {
+      FILTER_TIMEOUT_RESET = startRequestReset();
+      console.log("start reset");
+
       const { Variants } = data;
       const prods = getProductList(Variants);
       const urls = getParentsURLS(prods);
-      
+
+      FILTER_REQUEST_COUNT += urls.length + 1;
+
       Promise.all(
         urls.map((url) =>
           fetch(url).then((result) => {
@@ -194,6 +207,9 @@ const loadMoreProducts = () => {
           const { Variants } = data;
           const prods = getProductList(Variants);
           const urls = getParentsURLS(prods);
+          clearTimeout(FILTER_TIMEOUT_RESET);
+          FILTER_TIMEOUT_RESET = startRequestReset();
+          FILTER_REQUEST_COUNT += urls.length + 1;
 
           Promise.all(
             urls.map((url) =>
