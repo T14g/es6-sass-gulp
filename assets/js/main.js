@@ -8,6 +8,7 @@ let FILTER_TIMEOUT_RESET;
 const startRequestReset = () =>
   setInterval(() => {
     console.log("zerando");
+    FILTER_REQUEST_COUNT = 0;
     clearTimeout(FILTER_TIMEOUT_RESET);
   }, 60000);
 
@@ -165,35 +166,46 @@ const getProductList = (data) => {
 };
 
 const fetchProducts = () => {
-  disableSearch();
-  fetch(getURL())
-    .then((result) => result.json())
-    .then((data) => {
-      FILTER_TIMEOUT_RESET = startRequestReset();
-      console.log("start reset");
+  if (FILTER_REQUEST_COUNT >= 150) {
+    alert("Por favor aguarde um instante e clique novamente");
+    return;
+  }
 
-      const { Variants } = data;
-      const prods = getProductList(Variants);
-      const urls = getParentsURLS(prods);
+  if (validateSearch()) {
+    disableSearch();
+    fetch(getURL())
+      .then((result) => result.json())
+      .then((data) => {
+        FILTER_TIMEOUT_RESET = startRequestReset();
 
-      FILTER_REQUEST_COUNT += urls.length + 1;
+        const { Variants } = data;
+        const prods = getProductList(Variants);
+        const urls = getParentsURLS(prods);
 
-      Promise.all(
-        urls.map((url) =>
-          fetch(url).then((result) => {
-            return result.json();
-          })
-        )
-      ).then((data) => {
-        setParentData(data, prods);
-        FILTER_PRODUCTS_ARRAY = prods;
-        renderProducts(FILTER_PRODUCTS_ARRAY);
-        enableSearch();
+        FILTER_REQUEST_COUNT += urls.length + 1;
+
+        Promise.all(
+          urls.map((url) =>
+            fetch(url).then((result) => {
+              return result.json();
+            })
+          )
+        ).then((data) => {
+          setParentData(data, prods);
+          FILTER_PRODUCTS_ARRAY = prods;
+          renderProducts(FILTER_PRODUCTS_ARRAY);
+          enableSearch();
+        });
       });
-    });
+  }
 };
 
 const loadMoreProducts = () => {
+  if (FILTER_REQUEST_COUNT >= 150) {
+    alert("Por favor aguarde um instante e clique novamente");
+    return;
+  }
+
   let url = getURL();
   url += `&page=${FILTER_CURRENT_PAGE + 1}`;
 
