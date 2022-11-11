@@ -38,7 +38,16 @@ const toggleSearch = () => {
   }
 };
 
+const clearSelects = () => {
+  document.querySelector(".select-comprimento").value="";
+  document.querySelector(".select-largura").value="";
+  document.querySelector(".select-diametro").value="";
+};
+
 const toggleDiametro = () => {
+  clearSelects();
+  disableSearch();
+
   const selectDiametro = document.querySelector(".select-diametro");
   const selectLargura = document.querySelector(".select-largura");
   const selectComprimento = document.querySelector(".select-comprimento");
@@ -260,11 +269,11 @@ const renderProducts = (data) => {
     if (item.img) {
       html += `
       <div class="filter-product-single">
-        <a href="${item.url}" target="_blank">
-          <img src="${item.img}" />
+        <a class="filter-product-link" href="${item.url}" target="_blank">
+          <img class="filter-product-img" src="${item.img}" />
           <div class="name">${item.name}</div>
           ${
-            item.available
+            item.available == 1
               ? `<div class="price">A Partir de R$ ${item.price}</div>`
               : `<div class="available">Indisponível</div>`
           }
