@@ -4,11 +4,9 @@ let FILTER_CURRENT_PAGE = 0;
 let FILTER_PRODUCTS_ARRAY = [];
 let FILTER_REQUEST_COUNT = 0;
 let FILTER_TIMEOUT_RESET;
-let FILTER_SHOW_UNAVAILABLE = false;
 
 const startRequestReset = () =>
   setInterval(() => {
-    console.log("zerando");
     FILTER_REQUEST_COUNT = 0;
     clearTimeout(FILTER_TIMEOUT_RESET);
   }, 60000);
@@ -32,7 +30,22 @@ const disableLoadMore = () =>
   (document.getElementById("btn-load-more").disabled = true);
 
 const showErrorMessage = () =>
-  document.getElementById("new-filter-error-message").classList.remove("hidden");
+  document
+    .getElementById("new-filter-error-message")
+    .classList.remove("hidden");
+
+const hideErrorMessage = () =>
+  document.getElementById("new-filter-error-message").classList.add("hidden");
+
+const hideUnavailableProducts = () =>
+  document
+    .getElementById("filtered-products-list")
+    .classList.add("hide-unavailable");
+
+const showUnavailableProducts = () =>
+  document
+    .getElementById("filtered-products-list")
+    .classList.remove("hide-unavailable");
 
 const toggleSearch = () => {
   if (!validateSearch()) {
@@ -166,6 +179,7 @@ const getProductList = (data) => {
 
   data.forEach((variant) => {
     let item = {};
+    item.var_id = variant.Variant.id;
     item.prod_id = variant.Variant.product_id;
     item.img = variant.Variant.VariantImage[0]?.https;
     item.name = "";
@@ -260,10 +274,12 @@ const loadMoreProducts = () => {
 const renderProducts = (data) => {
   let html = ``;
   let productsListEl = document.getElementById("filtered-products-list");
+  let countAvailable = 0;
 
   if (data.length > 0) {
     enableLoadMore();
     showLoadMore();
+    hideErrorMessage();
   } else {
     hideLoadMore();
     disableLoadMore();
@@ -272,11 +288,18 @@ const renderProducts = (data) => {
 
   data.forEach((item) => {
     if (item.img) {
+      if (item.available == 1) {
+        countAvailable++;
+      }
+
       html += `
-      <div class="filter-product-single">
+      <div class="filter-product-single ${
+        item.available == 0 ? "product-unavailable" : ""
+      }">
         <a class="filter-product-link" href="${item.url}" target="_blank">
           <img class="filter-product-img" src="${item.img}" />
           <div class="name">${item.name}</div>
+          <div class="variant-id">Variação #${item.var_id}</div>
           ${
             item.available == 1
               ? `<div class="price">A Partir de R$ ${item.price}</div>`
@@ -288,5 +311,11 @@ const renderProducts = (data) => {
     }
   });
 
+  if (countAvailable > 0) {
+    hideUnavailableProducts();
+  } else {
+    showUnavailableProducts();
+  }
+  
   productsListEl.innerHTML = html;
 };

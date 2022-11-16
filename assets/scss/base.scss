@@ -131,3 +131,11 @@
     display: none;
   }
 }
+
+#filtered-products-list {
+  &.hide-unavailable {
+    .product-unavailable {
+      display: none;
+    }
+  }
+}
