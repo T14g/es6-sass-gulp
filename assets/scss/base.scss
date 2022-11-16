@@ -125,3 +125,9 @@
     cursor: initial;
   }
 }
+
+#new-filter-error-message {
+  &.hidden {
+    display: none;
+  }
+}

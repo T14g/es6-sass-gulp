@@ -4,6 +4,7 @@ let FILTER_CURRENT_PAGE = 0;
 let FILTER_PRODUCTS_ARRAY = [];
 let FILTER_REQUEST_COUNT = 0;
 let FILTER_TIMEOUT_RESET;
+let FILTER_SHOW_UNAVAILABLE = false;
 
 const startRequestReset = () =>
   setInterval(() => {
@@ -30,6 +31,9 @@ const enableLoadMore = () =>
 const disableLoadMore = () =>
   (document.getElementById("btn-load-more").disabled = true);
 
+const showErrorMessage = () =>
+  document.getElementById("new-filter-error-message").classList.remove("hidden");
+
 const toggleSearch = () => {
   if (!validateSearch()) {
     disableSearch();
@@ -39,9 +43,9 @@ const toggleSearch = () => {
 };
 
 const clearSelects = () => {
-  document.querySelector(".select-comprimento").value="";
-  document.querySelector(".select-largura").value="";
-  document.querySelector(".select-diametro").value="";
+  document.querySelector(".select-comprimento").value = "";
+  document.querySelector(".select-largura").value = "";
+  document.querySelector(".select-diametro").value = "";
 };
 
 const toggleDiametro = () => {
@@ -263,6 +267,7 @@ const renderProducts = (data) => {
   } else {
     hideLoadMore();
     disableLoadMore();
+    showErrorMessage();
   }
 
   data.forEach((item) => {
