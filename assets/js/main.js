@@ -47,6 +47,12 @@ const showUnavailableProducts = () =>
     .getElementById("filtered-products-list")
     .classList.remove("hide-unavailable");
 
+const setFilterNoResults = () =>
+  document.getElementById("filtered-products-list").classList.add("no-results");
+
+const unsetFilterNoResults = () =>
+  document.getElementById("filtered-products-list").classList.remove("no-results");
+
 const toggleSearch = () => {
   if (!validateSearch()) {
     disableSearch();
@@ -280,10 +286,12 @@ const renderProducts = (data) => {
     enableLoadMore();
     showLoadMore();
     hideErrorMessage();
+    unsetFilterNoResults();
   } else {
     hideLoadMore();
     disableLoadMore();
     showErrorMessage();
+    setFilterNoResults();
   }
 
   data.forEach((item) => {
@@ -302,7 +310,7 @@ const renderProducts = (data) => {
           <div class="variant-id">Variação #${item.var_id}</div>
           ${
             item.available == 1
-              ? `<div class="price">A Partir de R$ ${item.price}</div>`
+              ? `<div class="price">A partir de R$ ${item.price}</div>`
               : `<div class="available">Indisponível</div>`
           }
         </a>
@@ -316,6 +324,6 @@ const renderProducts = (data) => {
   } else {
     showUnavailableProducts();
   }
-  
+
   productsListEl.innerHTML = html;
 };
