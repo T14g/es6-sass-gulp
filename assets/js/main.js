@@ -11,23 +11,15 @@ const startRequestReset = () =>
     clearTimeout(FILTER_TIMEOUT_RESET);
   }, 60000);
 
-const enableSearch = () =>
-  (document.getElementById("btn-filtro-buscar").disabled = false);
-
-const disableSearch = () =>
-  (document.getElementById("btn-filtro-buscar").disabled = true);
-
 const showLoadMore = () =>
   document.getElementById("btn-load-more").classList.remove("hidden-btn");
 
 const hideLoadMore = () =>
   document.getElementById("btn-load-more").classList.add("hidden-btn");
 
-const enableLoadMore = () =>
-  (document.getElementById("btn-load-more").disabled = false);
+const setDisabled = (id) => (document.getElementById(id).disabled = true);
 
-const disableLoadMore = () =>
-  (document.getElementById("btn-load-more").disabled = true);
+const unsetDisabled = (id) => (document.getElementById(id).disabled = false);
 
 const showErrorMessage = () =>
   document
@@ -51,13 +43,15 @@ const setFilterNoResults = () =>
   document.getElementById("filtered-products-list").classList.add("no-results");
 
 const unsetFilterNoResults = () =>
-  document.getElementById("filtered-products-list").classList.remove("no-results");
+  document
+    .getElementById("filtered-products-list")
+    .classList.remove("no-results");
 
 const toggleSearch = () => {
   if (!validateSearch()) {
-    disableSearch();
+    setDisabled("btn-filtro-buscar");
   } else {
-    enableSearch();
+    unsetDisabled("btn-filtro-buscar");
   }
 };
 
@@ -69,7 +63,7 @@ const clearSelects = () => {
 
 const toggleDiametro = () => {
   clearSelects();
-  disableSearch();
+  setDisabled("btn-filtro-buscar");
 
   const selectDiametro = document.querySelector(".select-diametro");
   const selectLargura = document.querySelector(".select-largura");
@@ -88,9 +82,9 @@ const toggleDiametro = () => {
 
 const getURL = () => {
   let url = VARIANTS_URL;
-  const filterOne = getLargura();
-  const filterTwo = getComprimento();
-  const filterThree = getDiametro();
+  const filterOne = getValue(".select-largura");
+  const filterTwo = getValue(".select-comprimento");
+  const filterThree = getValue(".select-diametro");
 
   if (filterThree !== "") {
     url += `?type_1=Diametro&value_1=${filterThree}`;
@@ -110,12 +104,8 @@ const getURL = () => {
 
   return url;
 };
-const getLargura = () => document.querySelector(".select-largura").value;
 
-const getComprimento = () =>
-  document.querySelector(".select-comprimento").value;
-
-const getDiametro = () => document.querySelector(".select-diametro").value;
+const getValue = (selector) => document.querySelector(selector).value;
 
 document
   .getElementById("checkboxRedondas")
@@ -144,15 +134,15 @@ document.getElementById("select-diametro").addEventListener("change", () => {
 const validateSearch = () => {
   let valid = false;
 
-  if (getLargura() !== "") {
+  if (getValue(".select-largura") !== "") {
     valid = true;
   }
 
-  if (getComprimento() !== "") {
+  if (getValue(".select-comprimento") !== "") {
     valid = true;
   }
 
-  if (getDiametro() !== "") {
+  if (getValue(".select-diametro") !== "") {
     valid = true;
   }
 
@@ -205,7 +195,8 @@ const fetchProducts = () => {
   }
 
   if (validateSearch()) {
-    disableSearch();
+    setDisabled("btn-filtro-buscar");
+
     fetch(getURL())
       .then((result) => result.json())
       .then((data) => {
@@ -227,7 +218,7 @@ const fetchProducts = () => {
           setParentData(data, prods);
           FILTER_PRODUCTS_ARRAY = prods;
           renderProducts(FILTER_PRODUCTS_ARRAY);
-          enableSearch();
+          unsetDisabled("btn-filtro-buscar");
         });
       });
   }
@@ -243,7 +234,7 @@ const loadMoreProducts = () => {
   url += `&page=${FILTER_CURRENT_PAGE + 1}`;
 
   if (validateSearch()) {
-    disableLoadMore();
+    setDisabled("btn-load-more");
 
     fetch(url)
       .then((result) => result.json())
@@ -267,11 +258,11 @@ const loadMoreProducts = () => {
             FILTER_PRODUCTS_ARRAY = [...FILTER_PRODUCTS_ARRAY, ...prods];
             FILTER_CURRENT_PAGE += 1;
             renderProducts(FILTER_PRODUCTS_ARRAY);
-            enableLoadMore();
+            unsetDisabled("btn-load-more");
           });
         } else {
           alert("Sem mais resultados.");
-          enableLoadMore();
+          unsetDisabled("btn-load-more");
         }
       });
   }
@@ -283,13 +274,13 @@ const renderProducts = (data) => {
   let countAvailable = 0;
 
   if (data.length > 0) {
-    enableLoadMore();
+    unsetDisabled("btn-load-more");
     showLoadMore();
     hideErrorMessage();
     unsetFilterNoResults();
   } else {
     hideLoadMore();
-    disableLoadMore();
+    setDisabled("btn-load-more");
     showErrorMessage();
     setFilterNoResults();
   }
